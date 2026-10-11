@@ -1,10 +1,21 @@
 # Soares Embalagens — site institucional
 
-Site estático (HTML, CSS e JavaScript em um único `index.html`) da Soares Embalagens: big bags, bulk liners, bulk sheets e slings. Matriz em Santos/SP e filial em Machado/MG.
+Site estático da Soares Embalagens: big bags, bulk liners, bulk sheets e slings. Matriz em Santos/SP e filial em Machado/MG.
+
+## Estrutura
+
+```
+index.html          marcação das páginas e logotipos (SVG)
+css/style.css       estilos, tokens de cor e temas claro/escuro
+js/theme-init.js    aplica o tema salvo antes da primeira pintura
+js/main.js          navegação, catálogo, formulários e big bag 3D
+img/                fotos e favicon
+CNAME               domínio soaresemb.com.br
+```
 
 ## Páginas
 
-Navegação por âncoras dentro do mesmo arquivo: Início, Empresa, Produtos, Fale conosco, Vagas e Solicitar cotação.
+Navegação por âncoras dentro do `index.html`: Início, Empresa, Produtos, Fale conosco, Vagas e Solicitar cotação.
 
 ## Formulários
 
@@ -20,11 +31,11 @@ No primeiro envio de cada formulário, o FormSubmit manda um e-mail de ativaçã
 
 ## Publicação
 
-Hospedado no GitHub Pages a partir da branch `main`, pasta raiz. Não há etapa de build.
+Hospedado no GitHub Pages a partir da branch `main`, pasta raiz, no domínio [soaresemb.com.br](https://soaresemb.com.br). Não há etapa de build.
 
 ## Dependências externas
 
 - Fontes: Plus Jakarta Sans e IBM Plex Mono (Google Fonts)
 - Three.js r128 (cdnjs) para o big bag em 3D da página inicial
 
-Desenvolvido por [Pedro Lima](https://pedrolimv.is-a.dev).
+Desenvolvido por [Pedro Lima](https://pedrolimv.github.io/portfolio).
