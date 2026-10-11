@@ -6,6 +6,7 @@
 <meta name="description" content="Soares Embalagens: big bags, bulk liners, bulk sheets e slings para transporte e armazenagem de granéis desde 1971. Santos/SP e Machado/MG.">
 <meta name="theme-color" content="#01393d">
 <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+<script>try{var t=localStorage.getItem('soares-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>html{-webkit-text-size-adjust:100%}body{margin:0}[hidden]{display:none!important}</style>
 <title>Soares Embalagens</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,6 +92,17 @@ button,input,select,textarea{font:inherit;color:inherit}
 .menu-open .menu-btn span{background:transparent}
 .menu-open .menu-btn span::before{transform:translateY(6px) rotate(45deg)}
 .menu-open .menu-btn span::after{transform:translateY(-6px) rotate(-45deg)}
+/* Alternar tema claro/escuro */
+.theme-sw{position:fixed;z-index:55;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));width:64px;height:34px;border-radius:99px;border:0;padding:0;cursor:pointer;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--field-line),0 10px 30px -8px rgba(1,57,61,.45);transition:background .35s,transform .25s}
+.theme-sw:hover{transform:translateY(-2px)}
+.theme-sw .knob{position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:var(--tint);color:var(--accent);display:grid;place-items:center;box-shadow:0 2px 8px rgba(1,57,61,.25);transition:transform .35s cubic-bezier(.3,1.4,.5,1),background .35s,color .35s}
+.theme-sw svg{width:15px;height:15px;grid-area:1/1;transition:opacity .25s,transform .35s}
+.theme-sw .moon{opacity:0;transform:rotate(-60deg) scale(.6)}
+.theme-sw[aria-checked="true"]{background:var(--brand);box-shadow:inset 0 0 0 1.5px rgba(247,240,231,.25),0 10px 30px -8px rgba(0,0,0,.6)}
+.theme-sw[aria-checked="true"] .knob{transform:translateX(28px);background:var(--cream);color:var(--brand)}
+.theme-sw[aria-checked="true"] .sun{opacity:0;transform:rotate(60deg) scale(.6)}
+.theme-sw[aria-checked="true"] .moon{opacity:1;transform:none}
+html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,border-color .35s,box-shadow .35s!important}
 .nav .nav-cta{display:none}
 @media (max-width:960px){
   .nav,.top .btn-desk{display:none}
@@ -820,6 +832,13 @@ svg .i-accent{fill:#3d876d}
   </div>
 </footer>
 
+<button class="theme-sw" id="themeSw" type="button" role="switch" aria-checked="false" aria-label="Modo escuro" title="Alternar modo claro e escuro">
+  <span class="knob" aria-hidden="true">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+  </span>
+</button>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
@@ -971,6 +990,23 @@ document.addEventListener('click',e=>{
 });
 function selectText(btn){const el=btn.closest('.ch').querySelector('.val');const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Texto selecionado. Use Ctrl+C para copiar.')}
 function toast(msg){$$('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+
+/* ---------------- Tema claro/escuro ---------------- */
+(function(){
+  const root=document.documentElement,sw=$('#themeSw'),mq=matchMedia('(prefers-color-scheme: dark)');
+  const isDark=()=>{const t=root.getAttribute('data-theme');return t?t==='dark':mq.matches};
+  const paint=()=>{const d=isDark();sw.setAttribute('aria-checked',String(d));sw.setAttribute('aria-label',d?'Modo escuro ativo. Mudar para modo claro':'Modo claro ativo. Mudar para modo escuro')};
+  try{const s=localStorage.getItem('soares-theme');if(s==='light'||s==='dark')root.setAttribute('data-theme',s)}catch(_){}
+  sw.addEventListener('click',()=>{
+    const next=isDark()?'light':'dark';
+    root.classList.add('theme-anim');root.setAttribute('data-theme',next);
+    try{localStorage.setItem('soares-theme',next)}catch(_){}
+    paint();setTimeout(()=>root.classList.remove('theme-anim'),400);
+  });
+  if(mq.addEventListener)mq.addEventListener('change',paint);
+  new MutationObserver(paint).observe(root,{attributes:true,attributeFilter:['data-theme']});
+  paint();
+})();
 
 /* ---------------- Rotas ---------------- */
 const ROUTES=['inicio','empresa','produtos','cotacao','contato','vagas'];
